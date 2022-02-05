@@ -14,7 +14,7 @@ use tower::ServiceBuilder;
 use bollard::Docker;
 
 mod routes;
-use routes::{status};
+use routes::{status, report};
 
 #[tokio::main]
 async fn main() {
@@ -64,6 +64,11 @@ fn app(db: SqlitePool, dock: Docker) -> Router {
     Router::new()
         // Add middleware for every route
         .route("/status", get(status::handler))
+        .route("/report", get(report::list).post(report::create))
+        .route(
+            "/report/:id",
+            get(report::get).patch(report::update).delete(report::delete),
+        )
         .layer(
             ServiceBuilder::new()
                 .layer(TraceLayer::new_for_http())
