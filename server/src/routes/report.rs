@@ -45,7 +45,7 @@ pub async fn create(
     // Save it to the db
     let id = sqlx::query!(
         r#"
-        INSERT INTO REPORTS (name, scope, description, created, updated)
+        INSERT INTO reports (name, scope, description, created, updated)
         VALUES(?1, ?2, ?3, ?4, ?5)
         "#,
         report.name,
@@ -84,7 +84,7 @@ pub async fn list(Extension(db): Extension<SqlitePool>) -> Result<Json<Vec<Repor
     let recs = sqlx::query!(
         r#"
         SELECT id, name, scope, description, updated, created
-        FROM REPORTS
+        FROM reports
         ORDER BY id
         "#
     )
@@ -118,7 +118,7 @@ pub async fn get(
     let rec = sqlx::query!(
         r#"
         SELECT id, name, scope, description, updated, created
-        FROM REPORTS
+        FROM reports
         WHERE id = ?1
         "#,
         id
@@ -159,7 +159,7 @@ pub async fn update(
     let rec = sqlx::query!(
         r#"
         SELECT id, name, scope, description, updated, created
-        FROM REPORTS
+        FROM reports
         WHERE id = ?1
         "#,
         id
@@ -196,7 +196,7 @@ pub async fn update(
     // Save it to the db
     sqlx::query!(
         r#"
-        INSERT INTO REPORTS (name, scope, description, created, updated)
+        INSERT INTO reports (name, scope, description, created, updated)
         VALUES(?1, ?2, ?3, ?4, ?5)
         "#,
         report.name,
@@ -219,18 +219,17 @@ pub async fn update(
 // If new scope exists in old scope it removes it otherwise adds it to the scope
 fn update_scope(old: String, new: String) -> String {
     let mut old_scope: Vec<&str> = old.split(',').collect();
-    let new_scope: Vec<&str> = new.split(',').collect();
 
-    for new in new_scope.into_iter() {
+    for new_scope in new.split(',') {
         let mut add = true;
         old_scope.retain(|old| {
-            if old == &new {
+            if old == &new_scope {
                 add = false
             }
             add
         });
         if add {
-            old_scope.push(new)
+            old_scope.push(new_scope)
         }
     }
 
@@ -244,7 +243,7 @@ pub async fn delete(
     // Fetch the old report
     sqlx::query!(
         r#"
-        DELETE FROM REPORTS
+        DELETE FROM reports
         WHERE id = ?1
         "#,
         id
