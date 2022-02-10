@@ -63,7 +63,8 @@ async fn main() {
 fn app(db: SqlitePool, dock: Docker) -> Router {
     Router::new()
         // Add middleware for every route
-        .route("/status", get(status::handler))
+        .route("/status", get(status::status))
+        .route("/status/ssr", get(status::ssr))
         .route("/container", get(container::info))
         .route("/report", get(report::list).post(report::create))
         .route(
