@@ -1,5 +1,6 @@
 use axum::{
-    routing::{get},
+    http::StatusCode,
+    routing::{get, get_service},
     AddExtensionLayer, Router,
 };
 use dotenv::{dotenv, var};
@@ -9,7 +10,7 @@ use sqlx::{
 };
 use std::path::Path;
 use std::str::FromStr;
-use tower_http::trace::TraceLayer;
+use tower_http::{trace::TraceLayer, services::ServeDir};
 use tower::ServiceBuilder;
 use bollard::Docker;
 
@@ -63,6 +64,15 @@ async fn main() {
 fn app(db: SqlitePool, dock: Docker) -> Router {
     Router::new()
         // Add middleware for every route
+        .nest(
+            "/static",
+            get_service(ServeDir::new("static")).handle_error(|error: std::io::Error| async move {
+                (
+                    StatusCode::INTERNAL_SERVER_ERROR,
+                    format!("Unhandled internal error: {}", error),
+                )
+            }),
+        )
         .route("/status", get(status::status))
         .route("/status/ssr", get(status::ssr))
         .route("/container", get(container::info))
