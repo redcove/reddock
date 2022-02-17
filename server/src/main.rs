@@ -15,6 +15,7 @@ use tower::ServiceBuilder;
 use bollard::Docker;
 
 mod routes;
+mod components;
 use routes::{status, report, container};
 
 #[tokio::main]
