@@ -5,21 +5,25 @@ pub fn report_list(cx: Scope) -> Element {
         article {
             header {
                 nav {
-                    ul { li{ strong{ "Reports" } } }
+                    ul { li{ strong{ "Docker" } } }
                     ul { li{ a { href: "./reports/new", "New" } } }
                 }
             }
             table {
                 thead {
                     tr {
-                        th { "Name" }
-                        th { "Updated" }
+                        th { "Category" }
+                        th { "Status" }
                     }
                 }
                 tbody {
                     tr {
-                        td { a { href: "./reportid", "report 1"} },
-                        td {"2022-02-22"},
+                        td { "Active:" },
+                        td {"0"},
+                    }
+                    tr {
+                        td { "Insalled:" },
+                        td { "15" },
                     }
                 }
             }
