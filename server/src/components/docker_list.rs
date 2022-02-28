@@ -1,6 +1,6 @@
 use dioxus::prelude::*;
 
-pub fn report_list(cx: Scope) -> Element {
+pub fn list(cx: Scope) -> Element {
     cx.render(rsx!(
         article {
             header {

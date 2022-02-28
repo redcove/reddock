@@ -16,7 +16,7 @@ use bollard::Docker;
 
 mod routes;
 mod components;
-use routes::{status, report, container};
+use routes::{status, report, container, home};
 
 #[tokio::main]
 async fn main() {
@@ -74,6 +74,7 @@ fn app(db: SqlitePool, dock: Docker) -> Router {
                 )
             }),
         )
+        .route("/home", get(home::render))
         .route("/status", get(status::status))
         .route("/status/ssr", get(status::ssr))
         .route("/container", get(container::info))

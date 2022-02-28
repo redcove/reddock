@@ -11,7 +11,7 @@ pub fn head(cx: Scope) -> Element {
     ))
 }
 
-pub fn header(cx: Scope) -> Element {
+pub fn nav(cx: Scope) -> Element {
     cx.render(rsx!(
         header {
             h2 {
