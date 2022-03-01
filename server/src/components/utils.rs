@@ -26,10 +26,11 @@ pub fn nav(cx: Scope) -> Element {
 pub fn foot(cx: Scope) -> Element {
     cx.render(rsx!(
         footer {
+            class: "container",
             small {
                 "Support ",
                 a { href: "https://github.com/redcove/reddock", "Red Cove"},
-                "| ",
+                " | ",
                 a { href: "https://github.com/redcove/reddock", "Source"},
             }
         }
