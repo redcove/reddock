@@ -1,6 +1,19 @@
 use dioxus::prelude::*;
 
-pub fn list(cx: Scope) -> Element {
+// Our report type as stored in the DB
+#[derive(PartialEq, Clone)]
+pub struct Report {
+    id: i64,
+    name: String,
+    updated: i64,
+}
+
+#[derive(Props, PartialEq, Clone)]
+pub struct ReportProps {
+    pub reports: Vec<Report>,
+}
+
+pub fn ReportList(cx: Scope<ReportProps>) -> Element {
     cx.render(rsx!(
         article {
             header {
@@ -17,10 +30,13 @@ pub fn list(cx: Scope) -> Element {
                     }
                 }
                 tbody {
-                    tr {
-                        td { a { href: "./reportid", "report 1"} },
-                        td {"2022-02-22"},
-                    }
+                    cx.props.reports.iter().map(|report| rsx!(
+                        tr {
+                            key: "{report.id}",
+                            td {a { href: "/reports/{report.id}", "{report.name}"} },
+                            td { "{report.updated}" },
+                        }
+                    ))
                 }
             }
         }
